@@ -227,6 +227,7 @@ $ docker-machine rm default
 ```bash
 # Setup the VM as your Docker machine
 $ docker-machine create \
+ --engine-registry-mirror=https://registry.docker-cn.com \
  --driver "generic" \
  --generic-ip-address 192.168.33.1 \
  --generic-ssh-user vagrant \
