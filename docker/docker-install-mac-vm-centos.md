@@ -566,3 +566,42 @@ $ vagrant box remove dolbager/centos-7-docker
 until nc -z zk 2181; do echo "waiting for zk to be ready"; sleep 0.5; done
 ``````
 
+
+## 共享文件夹
+安装插件
+``````bash
+vagrant plugin install vagrant-sshfs
+``````
+
+编辑Vagrantfile
+``````
+ config.vm.synced_folder "/Users/gadbees/work/docker/ubuntu_data", "/home/vagrant/data", type: "sshfs"
+``````
+
+``````bash
+vagrant up
+vagrant sshfs
+docker run -d \
+           --net=br \
+           --name=c2  \
+           --ip=192.168.33.2 \
+           --hostname=c2.gadbees.com \
+           --volume=/home/vagrant/data:/data:rw \
+           -e JAVA_HOME=/usr/java/jdk1.8.0_144 \
+           --dns=192.168.33.1 \
+           baseos:1.0
+
+docker run -d \
+           --net=br \
+           --name=c3  \
+           --ip=192.168.33.3 \
+           --hostname=c3.gadbees.com \
+           --volume=/home/vagrant/data:/data:rw \
+           -e JAVA_HOME=/usr/java/jdk1.8.0_144 \
+           --dns=192.168.33.1 \
+           baseos:1.0
+
+``````
+
+
+
